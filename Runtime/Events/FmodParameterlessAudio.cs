@@ -25,6 +25,20 @@ namespace RoyTheunissen.FMODSyntax
             return instance;
         }
 
+        public override FmodParameterlessAudioPlayback Play(Vector3 source)
+        {
+            FmodParameterlessAudioPlayback instance = new FmodParameterlessAudioPlayback();
+            instance.Play(EventDescription, source);
+            return instance;
+        }
+
+        public override FmodParameterlessAudioPlayback Play(GameObject source)
+        {
+            FmodParameterlessAudioPlayback instance = new FmodParameterlessAudioPlayback();
+            instance.Play(EventDescription, source);
+            return instance;
+        }
+
         IAudioPlayback IAudioConfig.Play(Transform source)
         {
             FmodParameterlessAudioPlayback instance = new FmodParameterlessAudioPlayback();
