@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using FMOD;
 using FMOD.Studio;
 using UnityEngine;
 
@@ -80,6 +83,28 @@ namespace RoyTheunissen.FMODSyntax
         }
         
         private float smoothDampVolumeVelocity;
+
+        public EventInstance CreateInstance(EventDescription eventDescription)
+        {
+            eventDescription.getPath(out string path);
+
+            if (!eventDescription.isValid())
+            {
+                eventDescription.getID(out GUID guid);
+                // Debug.LogError($"Trying to fetch invalid FMOD Event guid: '{guid}' path:'{path}'");
+                throw new ArgumentException($"Invalid FMOD Event: {guid}");
+            }
+
+            // Events are called something like event:/ but we want to get rid of any prefix like that.
+            // Also every 'folder' along the way will be treated like a sort of 'tag'
+            SearchKeywords = path.Substring(path.IndexOf("/", StringComparison.Ordinal) + 1).Replace('/', ',');
+
+            Name = Path.GetFileName(path);
+
+            EventDescription = eventDescription;
+            eventDescription.createInstance(out EventInstance newInstance);
+            return newInstance;
+        }
         
         protected virtual void InitializeParameters()
         {

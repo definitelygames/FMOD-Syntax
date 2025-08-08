@@ -24,6 +24,8 @@ namespace RoyTheunissen.FMODSyntax
         }
 
         public abstract PlaybackType Play(Transform source = null);
+        public abstract PlaybackType Play(Vector3 source);
+        public abstract PlaybackType Play(GameObject source = null);
 
         IAudioPlayback IAudioConfig.Play(Transform source)
         {

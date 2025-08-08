@@ -29,35 +29,48 @@ namespace RoyTheunissen.FMODSyntax
     /// </summary>
     public abstract class FmodAudioPlayback : FmodAudioPlaybackBase, IAudioPlayback
     {
-        public void Play(EventDescription eventDescription, Transform source)
+        public void Play(EventDescription eventDescription, Vector3 source)
         {
-            eventDescription.getPath(out string path);
-            
-            if (!eventDescription.isValid())
+            Instance = CreateInstance(eventDescription);
+
+            if (source != null)
             {
-                eventDescription.getID(out GUID guid);
-                Debug.LogError($"Trying to play invalid FMOD Event guid: '{guid}' path:'{path}'");
-                return;
+                Instance.set3DAttributes(RuntimeUtils.To3DAttributes(source));
             }
 
-            // Events are called something like event:/ but we want to get rid of any prefix like that.
-            // Also every 'folder' along the way will be treated like a sort of 'tag'
-            SearchKeywords = path.Substring(path.IndexOf("/", StringComparison.Ordinal) + 1).Replace('/', ',');
-            
-            Name = Path.GetFileName(path);
+            Play();
+        }
 
-            EventDescription = eventDescription;
-            eventDescription.createInstance(out EventInstance newInstance);
-            Instance = newInstance;
-            
+        public void Play(EventDescription eventDescription, GameObject source)
+        {
+            Instance = CreateInstance(eventDescription);
+
             if (source != null)
             {
                 Instance.set3DAttributes(RuntimeUtils.To3DAttributes(source));
                 RuntimeManager.AttachInstanceToGameObject(Instance, source);
             }
-            
-            // Cache properties.
-            eventDescription.isOneshot(out bool isOneshotResult);
+
+            Play();
+        }
+
+        [Obsolete("Deprecated. Pass a GameObject or Vector3 instead.")]
+        public void Play(EventDescription eventDescription, Transform source)
+        {
+            Instance = CreateInstance(eventDescription);
+
+            if (source != null)
+            {
+                Instance.set3DAttributes(RuntimeUtils.To3DAttributes(source));
+                RuntimeManager.AttachInstanceToGameObject(Instance, source);
+            }
+
+            Play();
+        }
+
+        private void Play()
+        {
+            EventDescription.isOneshot(out bool isOneshotResult);
             IsOneshot = isOneshotResult;
 
             InitializeParameters();

@@ -1,13 +1,22 @@
 public sealed class ##EventName##Config : FmodAudioConfig<##EventName##Playback>
 {
     public ##EventName##Config(string guid) : base(guid) { }
-    
-    public ##EventName##Playback CreateInstance()
-    {
-        return new ##EventName##Playback();
-    }
 
     public override ##EventName##Playback Play(Transform source = null)
+    {
+        ##EventName##Playback instance = new ##EventName##Playback();
+        instance.Play(EventDescription, source);
+        return instance;
+    }
+
+    public override ##EventName##Playback Play(Vector3 source)
+    {
+        ##EventName##Playback instance = new ##EventName##Playback();
+        instance.Play(EventDescription, source);
+        return instance;
+    }
+
+    public override ##EventName##Playback Play(GameObject source)
     {
         ##EventName##Playback instance = new ##EventName##Playback();
         instance.Play(EventDescription, source);
