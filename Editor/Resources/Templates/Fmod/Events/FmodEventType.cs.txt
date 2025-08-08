@@ -2,6 +2,11 @@ public sealed class ##EventName##Config : FmodAudioConfig<##EventName##Playback>
 {
     public ##EventName##Config(string guid) : base(guid) { }
     
+    public ##EventName##Playback CreateInstance()
+    {
+        return new ##EventName##Playback();
+    }
+
     public override ##EventName##Playback Play(Transform source = null)
     {
         ##EventName##Playback instance = new ##EventName##Playback();
